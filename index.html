@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Capture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #temperature {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Capture Temperature from Raspberry Pi</h1>
+    <button onclick="captureTemperature()">Capture Temperature</button>
+    <p id="temperature">Temperature: N/A</p>
+
+    <script>
+        function captureTemperature() {
+            // Make a request to the server to capture the temperature
+            fetch('/capture_temperature')
+                .then(response => response.json())  // Convert the response to JSON
+                .then(data => {
+                    // Update the temperature displayed on the page
+                    if (data.temperature) {
+                        document.getElementById('temperature').innerText = "Temperature: " + data.temperature + " °C";
+                    } else {
+                        document.getElementById('temperature').innerText = "Error fetching temperature.";
+                    }
+                })
+                .catch(error => {
+                    // Handle errors if any
+                    console.error("Error fetching temperature:", error);
+                    document.getElementById('temperature').innerText = "Error fetching temperature.";
+                });
+        }
+    </script>
+</body>
+</html>
